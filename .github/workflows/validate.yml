@@ -1,0 +1,34 @@
+name: Vérifications
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Tous les lundis à 8h UTC : détecte les liens officiels qui se seraient
+    # cassés depuis la dernière vérification (le mapping des champs Cerfa,
+    # lui, ne peut changer que si on modifie le code — inutile en planifié).
+    - cron: "0 8 * * 1"
+
+jobs:
+  validate-cerfa-fields:
+    name: Champs des assistants Cerfa
+    runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-save pdf-lib
+      - run: npm run validate:cerfa
+
+  check-links:
+    name: Liens officiels des démarches
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm run check:links

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2GETHER — Trouve les ressources qui peuvent t'aider</title>
+  <meta name="description" content="Questionnaire pour trouver les ressources et structures d'aide adaptées à ta situation, proposé par l'association 2GETHER." />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/icon-16.png" />
+  <link rel="apple-touch-icon" href="assets/icons/icon-180.png" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#7c3aed" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="2GETHER — Trouve les ressources qui peuvent t'aider" />
+  <meta property="og:description" content="Questionnaire pour trouver les ressources, structures d'aide et démarches administratives adaptées à ta situation." />
+  <meta property="og:image" content="assets/icons/icon-512.png" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="safety-bar">
+    <p class="safety-numbers">
+      🆘 Urgence :
+      <a href="tel:112">112</a> ·
+      <a href="tel:3919">3919</a> (violences) ·
+      <a href="tel:3114">3114</a> (suicide) ·
+      <a href="tel:119">119</a> (enfance en danger)
+    </p>
+    <button type="button" id="quick-exit" class="quick-exit-btn" title="Quitte immédiatement ce site (touche Échap)">
+      Quitter rapidement ✕
+    </button>
+  </div>
+
+  <header class="site-header">
+    <img class="logo" src="assets/logo-2gether.png" alt="2GETHER" />
+    <p class="tagline">Des ressources pour t'aider à sortir de l'isolement</p>
+    <nav class="site-nav">
+      <button type="button" class="nav-btn active" data-view="view-intro">Accueil</button>
+      <button type="button" class="nav-btn" data-view="view-browse">Ressources</button>
+      <button type="button" class="nav-btn" data-view="view-demarches">Démarches</button>
+    </nav>
+  </header>
+
+  <main>
+    <div id="loading-banner" class="banner">Chargement des ressources…</div>
+    <div id="global-error" class="banner banner-error" hidden>
+      Impossible de charger les ressources pour le moment. Vérifie ta connexion et recharge la page.
+    </div>
+    <div id="global-empty" class="banner banner-warning" hidden>
+      Aucune ressource n'est encore enregistrée dans le tableau partagé. Reviens un peu plus tard !
+    </div>
+
+    <!-- Accueil -->
+    <section id="view-intro" class="view active">
+      <div class="card intro-card">
+        <h1>Salut 👋</h1>
+        <p>
+          Ce petit questionnaire t'aide à trouver rapidement les structures et ressources
+          qui peuvent répondre à ta situation. Ça prend 2 minutes, c'est anonyme et rien n'est enregistré.
+        </p>
+        <button id="start-quiz" class="btn btn-primary">Commencer le questionnaire</button>
+        <button id="go-browse-from-intro" class="btn btn-ghost">Parcourir toutes les ressources</button>
+        <button id="go-demarches-from-intro" class="btn btn-ghost">Démarches administratives</button>
+      </div>
+    </section>
+
+    <!-- Quiz -->
+    <section id="view-quiz" class="view">
+      <div class="card quiz-card">
+        <div class="progress-track">
+          <div id="quiz-progress-bar" class="progress-fill"></div>
+        </div>
+        <p id="quiz-step" class="quiz-step"></p>
+        <div id="quiz-question"></div>
+        <div class="quiz-nav">
+          <button id="quiz-back" type="button" class="btn btn-ghost">Précédent</button>
+          <button id="quiz-next" type="button" class="btn btn-primary">Suivant</button>
+        </div>
+        <button type="button" class="btn btn-link back-to-intro">Annuler</button>
+      </div>
+    </section>
+
+    <!-- Résultats -->
+    <section id="view-results" class="view">
+      <div class="results-header">
+        <h1>Voici ce qui pourrait t'intéresser</h1>
+        <div class="results-actions">
+          <button id="retake-quiz" type="button" class="btn btn-ghost">Refaire le questionnaire</button>
+          <button id="go-browse-from-results" type="button" class="btn btn-ghost">Voir toutes les ressources</button>
+        </div>
+      </div>
+      <div id="results-content"></div>
+    </section>
+
+    <!-- Parcours libre -->
+    <section id="view-browse" class="view">
+      <div class="results-header">
+        <h1>Toutes les ressources</h1>
+        <button type="button" class="btn btn-ghost back-to-intro">← Retour à l'accueil</button>
+      </div>
+      <input id="browse-search" type="search" class="search-input" placeholder="Rechercher (nom, mot-clé...)" aria-label="Rechercher une ressource" />
+      <div id="browse-filters" class="filters"></div>
+      <div id="browse-results"></div>
+    </section>
+
+    <!-- Démarches administratives -->
+    <section id="view-demarches" class="view">
+      <div class="results-header">
+        <h1>Démarches administratives</h1>
+        <button type="button" class="btn btn-ghost back-to-intro">← Retour à l'accueil</button>
+      </div>
+      <p class="hint">
+        Pour chaque démarche : les documents généralement demandés (coche-les au fur et à mesure que tu les
+        prépares) et un lien vers le formulaire officiel. À vérifier au cas par cas, le site officiel fait
+        toujours foi.
+      </p>
+      <input id="demarches-search" type="search" class="search-input" placeholder="Rechercher (nom de la démarche...)" aria-label="Rechercher une démarche" />
+      <div id="demarches-filters" class="filters"></div>
+      <div id="demarches-results"></div>
+    </section>
+
+    <!-- Assistant de remplissage de Cerfa -->
+    <section id="view-cerfa-wizard" class="view">
+      <div class="card quiz-card">
+        <h1 id="wizard-title" class="wizard-title"></h1>
+        <p id="wizard-intro" class="hint"></p>
+        <div class="progress-track">
+          <div id="wizard-progress-bar" class="progress-fill"></div>
+        </div>
+        <p id="wizard-step-label" class="quiz-step"></p>
+        <div id="wizard-error" class="banner banner-error" hidden>
+          Une erreur est survenue pendant la génération du PDF. Réessaie, et si ça persiste, remplis le PDF
+          officiel directement (lien plus haut).
+        </div>
+        <div id="wizard-content"></div>
+        <div class="quiz-nav">
+          <button id="wizard-back" type="button" class="btn btn-ghost">Précédent</button>
+          <button id="wizard-next" type="button" class="btn btn-primary">Suivant</button>
+        </div>
+        <button type="button" id="wizard-quit" class="btn btn-link">Quitter l'assistant</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>🔒 Ce questionnaire est anonyme : aucune réponse n'est enregistrée ni transmise, tout reste dans ton navigateur (y compris ta checklist de documents).</p>
+    <p>
+      Association 2GETHER — <span id="app-year"></span> —
+      <a href="https://www.2gether-asso.fr" target="_blank" rel="noopener">Notre site</a>
+    </p>
+  </footer>
+
+  <script src="js/themes.js"></script>
+  <script src="js/demarches.js"></script>
+  <script src="js/mdph-form.js"></script>
+  <script src="js/logement-form.js"></script>
+  <script src="js/sante-solidaire-form.js"></script>
+  <script src="js/pdf-assistant.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

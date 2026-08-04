@@ -1,0 +1,12 @@
+{
+  "name": "2gether-site",
+  "private": true,
+  "description": "Outillage de vérification (CI) pour le site 2GETHER — le site lui-même ne nécessite aucun build.",
+  "scripts": {
+    "validate:cerfa": "node scripts/validate-cerfa-fields.js",
+    "check:links": "node scripts/check-links.js"
+  },
+  "devDependencies": {
+    "pdf-lib": "^1.17.1"
+  }
+}
